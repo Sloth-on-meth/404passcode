@@ -45,6 +45,7 @@ client.Dispatcher.on("GATEWAY_READY", e => {
 
 //Welcome message in #passcode
 client.Dispatcher.on("GUILD_MEMBER_ADD", e => {
+    var passcodeChannel             =   client.Channels.get('269612335675473921')
     passcodeChannel.sendMessage(
         `
 Welcome  ${e.member.mention} to the **${e.guild.name}** official discord server!
@@ -53,11 +54,12 @@ Welcome  ${e.member.mention} to the **${e.guild.name}** official discord server!
 });
 
 client.Dispatcher.on("MESSAGE_CREATE", e => {
+    var message                     =   e.message
     var mainchannel                 =   client.Channels.get('432740303825403906')
     var passcodeChannel             =   client.Channels.get('269612335675473921')
     var staffbotschannel            =   client.Channels.get('452098129328603136')
     var serverID                    =   require("./settings.json")
-    var message                     =   e.message
+    var ownerID                     =   '151063310199029760'
     var channel                     =   message.channel
     var author                      =   message.member
     var guild                       =   message.guild
@@ -74,15 +76,17 @@ client.Dispatcher.on("MESSAGE_CREATE", e => {
 
     //--donate  #staff-bots              Send a message to main, asking for a donation
 
-    if (content.startsWith(p + 'donate') && channel.id == staffbotschannelid) {
+    if (content.startsWith(p + 'donate') && channel.id == staffbotschannel.id) {
         if (author.id == ownerID) {
             message.delete();
             mainchannel.sendMessage('Running the website, bots and advertising costs money. Wanna help out? Become a patreon and get a sicc role! http://404discord.com/donate');
         } else channel.sendMessage('<:error:335660275481051136> **Owner Only**')
     }
 
+    
+
     //--ping  #passcode                    Returns response time
-    if (content.startsWith(p + 'ping') && channel.id == passcodeChanneliD) {
+    if (content.startsWith(p + 'ping') && channel.id == passcodeChannel.id) {
         let start = process.hrtime();
         channel.sendMessage("ping: ").then(m => {
             const diff = process.hrtime(start);
@@ -201,7 +205,7 @@ client.Dispatcher.on("MESSAGE_CREATE", e => {
 
     //undank
 
-    if (content == '--un404' && channel.id == passcodeChanneliD) {
+    if (content == '--un404' && channel.id == passcodeChannel.id) {
         if (!author.hasRole(passRole)) channel.sendMessage(`Silly you, ' + author.mention + ', you don\'t have **${passRole.name}**`)
         else {
             message.delete();
@@ -214,7 +218,7 @@ client.Dispatcher.on("MESSAGE_CREATE", e => {
 
     ////////////////////////////////// FUNNY COMMANDS /////////////////////////////////////////////////////////
     //dink
-    if (content.startsWith(p + 'dink') && channel.id == passcodeChanneliD) {
+    if (content.startsWith(p + 'dink') && channel.id == passcodeChannel.id) {
         channel.sendMessage('get urself checked out');
         console.log('told ' + author.nick + ' to get checked out')
 
@@ -222,14 +226,14 @@ client.Dispatcher.on("MESSAGE_CREATE", e => {
 
 
     //donk
-    if (content.startsWith(p + 'donk') && channel.id == passcodeChanneliD) {
+    if (content.startsWith(p + 'donk') && channel.id == passcodeChannel.id) {
         channel.sendMessage('get urself checked out');
         console.log('told ' + author.nick + ' to get checked out')
 
     }
 
     //drink
-    if (content.startsWith(p + 'drink') && channel.id == passcodeChanneliD) {
+    if (content.startsWith(p + 'drink') && channel.id == passcodeChannel.id) {
         channel.sendMessage('https://i.imgur.com/dDLVtpA.png')
         console.log('' + author.nick + ' did --drink')
     }
@@ -241,5 +245,13 @@ client.Dispatcher.on("MESSAGE_CREATE", e => {
             mainchannel.sendMessage(' no u ');
             console.log('yelled no u');
         }
+    }
+    //--owo  #staff-bots              Send a message to main, asking for a donation
+
+    if (content.startsWith(p + 'owo') && channel.id == staffbotschannel.id) {
+        if (author.id == ownerID) {
+            message.delete();
+            mainchannel.sendMessage('OwO');
+        } else channel.sendMessage('<:error:335660275481051136> **Owner Only**')
     }
 });
